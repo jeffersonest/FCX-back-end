@@ -198,12 +198,20 @@ export class UsersAdapter implements UsersPort {
 
     if (filterValue && filterType) {
       if (filterType === 'CPF') {
-        query.andWhere('user.cpf = :cpf', { cpf: filterValue });
+        query.andWhere('user.cpf LIKE :cpf', { cpf: `%${filterValue}%` });
       }
-      // Adicione aqui outras condições de filtro baseadas em 'filterType'
+
+      // Usando LIKE para nome
+      if (filterType === 'name') {
+        query.andWhere('user.name LIKE :name', { name: `%${filterValue}%` });
+      }
+
+      // Usando LIKE para email
+      if (filterType === 'email') {
+        query.andWhere('user.email LIKE :email', { email: `%${filterValue}%` });
+      }
     }
 
-    // Filtros de data - ajuste conforme sua lógica
     if (birthDateBegin) {
       query.andWhere('user.birth >= :birthDateBegin', { birthDateBegin });
     }
