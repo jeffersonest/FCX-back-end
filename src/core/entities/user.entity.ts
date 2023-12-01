@@ -1,6 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Unique,
+} from 'typeorm';
 
 @Entity()
+@Unique(['login', 'email', 'cpf', 'phone'])
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -15,17 +23,33 @@ export class User {
   email: string;
 
   @Column()
+  cpf: string;
+
+  @Column()
   password: string;
 
   @Column()
   phone: string;
 
   @Column()
-  birth: string;
+  birth: Date;
 
   @Column()
   motherName: string;
 
   @Column({ default: true })
-  status: boolean;
+  status: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  updatedAt: Date;
 }
