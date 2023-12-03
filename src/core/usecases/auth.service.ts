@@ -1,8 +1,4 @@
-import {
-  HttpException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthPort } from '../ports/auth.port';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../entities/user.entity';
@@ -32,9 +28,5 @@ export class AuthService {
     } else {
       throw new UnauthorizedException();
     }
-  }
-
-  async validateUserPayload(payload: any): Promise<any> {
-    return this.authPort.validateUserPayload(payload);
   }
 }

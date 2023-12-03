@@ -21,6 +21,8 @@ export class UsersAdapter implements UsersPort {
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
+      await this.checkUserExists(0, createUserDto);
+
       const saltRounds = 10;
 
       const hashedPassword = await bcrypt.hash(
@@ -45,6 +47,10 @@ export class UsersAdapter implements UsersPort {
 
       return userData;
     } catch (error) {
+      console.log(error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
       this.handleDatabaseError(error);
     }
   }
@@ -67,46 +73,50 @@ export class UsersAdapter implements UsersPort {
     }
   }
 
+  async checkUserExists(id: number, userData: CreateUserDto): Promise<void> {
+    if (userData.email) {
+      const existingUserByEmail = await this.userRepository.findOneBy({
+        email: userData.email,
+      });
+
+      if (existingUserByEmail && existingUserByEmail.id != id) {
+        throw new HttpException('O email fornecido já está em uso.', 400);
+      }
+    }
+
+    if (userData.login) {
+      const existingUserByLogin = await this.userRepository.findOneBy({
+        login: userData.login,
+      });
+      if (existingUserByLogin && existingUserByLogin.id != id) {
+        throw new HttpException('O login fornecido já está em uso.', 400);
+      }
+    }
+
+    if (userData.cpf) {
+      const existingUserByCpf = await this.userRepository.findOneBy({
+        cpf: userData.cpf,
+      });
+      if (existingUserByCpf && existingUserByCpf.id != id) {
+        throw new HttpException('O CPF fornecido já está em uso.', 400);
+      }
+    }
+
+    if (userData.phone) {
+      const existingUserByPhone = await this.userRepository.findOneBy({
+        phone: userData.phone,
+      });
+      if (existingUserByPhone && existingUserByPhone.id != id) {
+        throw new HttpException(
+          'O número de telefone fornecido já está em uso.',
+          400,
+        );
+      }
+    }
+  }
   async updateUser(id: number, userData: CreateUserDto): Promise<User> {
     try {
-      if (userData.email) {
-        const existingUserByEmail = await this.userRepository.findOneBy({
-          email: userData.email,
-        });
-        if (existingUserByEmail && existingUserByEmail.id != id) {
-          throw new HttpException('O email fornecido já está em uso.', 400);
-        }
-      }
-
-      if (userData.login) {
-        const existingUserByLogin = await this.userRepository.findOneBy({
-          login: userData.login,
-        });
-        if (existingUserByLogin && existingUserByLogin.id != id) {
-          throw new HttpException('O login fornecido já está em uso.', 400);
-        }
-      }
-
-      if (userData.cpf) {
-        const existingUserByCpf = await this.userRepository.findOneBy({
-          cpf: userData.cpf,
-        });
-        if (existingUserByCpf && existingUserByCpf.id != id) {
-          throw new HttpException('O CPF fornecido já está em uso.', 400);
-        }
-      }
-
-      if (userData.phone) {
-        const existingUserByPhone = await this.userRepository.findOneBy({
-          phone: userData.phone,
-        });
-        if (existingUserByPhone && existingUserByPhone.id != id) {
-          throw new HttpException(
-            'O número de telefone fornecido já está em uso.',
-            400,
-          );
-        }
-      }
+      await this.checkUserExists(id, userData);
 
       if (userData.password) {
         const saltRounds = 10;
@@ -238,6 +248,11 @@ export class UsersAdapter implements UsersPort {
     }
 
     const users = await query.getMany();
+
+    users.map((user) => {
+      delete user.password;
+    });
+
     return users;
   }
 }
