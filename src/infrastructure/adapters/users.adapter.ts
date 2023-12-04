@@ -1,11 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  Brackets,
-  createQueryBuilder,
-  Repository,
-  UpdateResult,
-} from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { User } from '../../core/entities/user.entity';
 import { UsersPort } from '../../core/ports/users.port';
 import { CreateUserDto } from '../controllers/dto/create-user.dto';
@@ -181,8 +176,8 @@ export class UsersAdapter implements UsersPort {
       userActive,
       filterValue,
       filterType,
-      birthDateBegin,
       ageRange,
+      birthDateBegin,
       birthDateEnd,
       registerDateBegin,
       registerDateEnd,
@@ -197,17 +192,27 @@ export class UsersAdapter implements UsersPort {
     }
 
     if (ageRange) {
-      const [ageFrom, ageTo] = ageRange.split('>').map((age) => parseInt(age));
       const currentDate = new Date().toISOString().slice(0, 10);
 
-      query.andWhere(
-        `DATE_PART('year', AGE(:currentDate, user.birth)) >= :ageFrom AND DATE_PART('year', AGE(:currentDate, user.birth)) <= :ageTo`,
-        { currentDate, ageFrom, ageTo },
-      );
+      if (ageRange.startsWith('>')) {
+        const age = parseInt(ageRange.slice(1));
+        query.andWhere(
+          `DATE_PART('year', AGE(:currentDate, user.birth)) >= :age`,
+          { currentDate, age },
+        );
+      } else {
+        const [ageFrom, ageTo] = ageRange
+          .split('>')
+          .map((age) => parseInt(age));
+        query.andWhere(
+          `DATE_PART('year', AGE(:currentDate, user.birth)) BETWEEN :ageFrom AND :ageTo`,
+          { currentDate, ageFrom, ageTo },
+        );
+      }
     }
 
     if (filterValue && filterType) {
-      if (filterType === 'CPF') {
+      if (filterType === 'document') {
         query.andWhere('user.cpf LIKE :cpf', { cpf: `%${filterValue}%` });
       }
 
@@ -222,29 +227,25 @@ export class UsersAdapter implements UsersPort {
       }
     }
 
-    if (birthDateBegin) {
-      query.andWhere('user.birth >= :birthDateBegin', { birthDateBegin });
-    }
-    if (birthDateEnd) {
-      query.andWhere('user.birth <= :birthDateEnd', { birthDateEnd });
-    }
-
-    if (registerDateBegin) {
-      query.andWhere('user.createdAt >= :registerDateBegin', {
-        registerDateBegin,
+    if (birthDateBegin && birthDateEnd) {
+      query.andWhere('user.birth BETWEEN :start AND :end', {
+        start: this.setTimeBeginOfDay(birthDateBegin).toISOString(),
+        end: this.setTimeEndOfDay(birthDateEnd).toISOString(),
       });
     }
-    if (registerDateEnd) {
-      query.andWhere('user.createdAt <= :registerDateEnd', { registerDateEnd });
-    }
 
-    if (updateDateBegin) {
-      query.andWhere('user.updatedAt >= :updateDateBegin', {
-        updateDateBegin,
+    if (registerDateBegin && registerDateEnd) {
+      query.andWhere('user.createdAt BETWEEN :start AND :end', {
+        start: this.setTimeBeginOfDay(registerDateBegin).toISOString(),
+        end: this.setTimeEndOfDay(registerDateEnd).toISOString(),
       });
     }
-    if (updateDateEnd) {
-      query.andWhere('user.updatedAt <= :updateDateEnd', { updateDateEnd });
+
+    if (updateDateBegin && updateDateEnd) {
+      query.andWhere('user.updatedAt BETWEEN :start AND :end', {
+        start: this.setTimeBeginOfDay(updateDateBegin).toISOString(),
+        end: this.setTimeEndOfDay(updateDateEnd).toISOString(),
+      });
     }
 
     const users = await query.getMany();
@@ -254,5 +255,33 @@ export class UsersAdapter implements UsersPort {
     });
 
     return users;
+  }
+
+  setTimeEndOfDay(dateInput: Date): Date {
+    const date =
+      typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+
+    if (date instanceof Date && !isNaN(date.getTime())) {
+      const endDate = new Date(date);
+      endDate.setHours(23, 59, 59, 999);
+      return endDate;
+    } else {
+      console.log('Data inválida');
+      return dateInput instanceof Date ? dateInput : new Date();
+    }
+  }
+
+  setTimeBeginOfDay(dateInput: Date): Date {
+    const date =
+      typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+
+    if (date instanceof Date && !isNaN(date.getTime())) {
+      const endDate = new Date(date);
+      endDate.setHours(0, 0, 0, 0);
+      return endDate;
+    } else {
+      console.log('Data inválida');
+      return dateInput instanceof Date ? dateInput : new Date();
+    }
   }
 }
