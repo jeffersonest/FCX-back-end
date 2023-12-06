@@ -15,6 +15,7 @@ import { UsersService } from '../../core/usecases/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UserFilterDto } from './dto/user-filter.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -48,9 +49,9 @@ export class UsersController {
   @Put(':id')
   async updateUser(
     @Param('id') id: number,
-    @Body() createUserDto: CreateUserDto,
+    @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    return this.usersService.updateUser(id, createUserDto);
+    return this.usersService.updateUser(id, updateUserDto);
   }
 
   @UseGuards(JwtAuthGuard)

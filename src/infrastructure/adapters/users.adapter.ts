@@ -6,6 +6,7 @@ import { UsersPort } from '../../core/ports/users.port';
 import { CreateUserDto } from '../controllers/dto/create-user.dto';
 import { UserFilterDto } from '../controllers/dto/user-filter.dto';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserDto } from '../controllers/dto/update-user.dto';
 
 @Injectable()
 export class UsersAdapter implements UsersPort {
@@ -109,7 +110,7 @@ export class UsersAdapter implements UsersPort {
       }
     }
   }
-  async updateUser(id: number, userData: CreateUserDto): Promise<User> {
+  async updateUser(id: number, userData: UpdateUserDto): Promise<User> {
     try {
       await this.checkUserExists(id, userData);
 

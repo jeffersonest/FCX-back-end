@@ -3,11 +3,14 @@ import { AuthPort } from '../ports/auth.port';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../entities/user.entity';
 import { LoginDto } from '../../infrastructure/controllers/dto/login.dto';
+import { RecoverAccessDto } from '../../infrastructure/controllers/dto/recover-access.dto';
+import { MailPort } from '../ports/mail.port';
 
 @Injectable()
 export class AuthService {
   constructor(
     private authPort: AuthPort,
+    private mailPort: MailPort,
     private jwtService: JwtService,
   ) {}
 
@@ -28,5 +31,9 @@ export class AuthService {
     } else {
       throw new UnauthorizedException();
     }
+  }
+
+  async recoverPassword(recoverAccessDto: RecoverAccessDto): Promise<any> {
+    return this.authPort.recoverPassword(recoverAccessDto);
   }
 }

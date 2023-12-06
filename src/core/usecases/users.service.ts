@@ -3,6 +3,7 @@ import { User } from '../entities/user.entity';
 import { UsersPort } from '../ports/users.port';
 import { CreateUserDto } from '../../infrastructure/controllers/dto/create-user.dto';
 import { UserFilterDto } from '../../infrastructure/controllers/dto/user-filter.dto';
+import { UpdateUserDto } from '../../infrastructure/controllers/dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -20,8 +21,8 @@ export class UsersService {
     return this.usersPort.findUserById(id);
   }
 
-  async updateUser(id: number, createUserDto: CreateUserDto): Promise<User> {
-    return this.usersPort.updateUser(id, createUserDto);
+  async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    return this.usersPort.updateUser(id, updateUserDto);
   }
 
   async deleteUser(id: number): Promise<User> {

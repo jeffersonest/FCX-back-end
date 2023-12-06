@@ -11,6 +11,7 @@ import { AuthService } from '../../core/usecases/auth.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request } from 'express';
+import { RecoverAccessDto } from './dto/recover-access.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -29,5 +30,12 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async validateUserToken(@Req() request: any): Promise<any> {
     return request.user;
+  }
+
+  @Post('recover')
+  async recoverPassword(
+    @Body() recoverAccessDto: RecoverAccessDto,
+  ): Promise<any> {
+    return this.authService.recoverPassword(recoverAccessDto);
   }
 }

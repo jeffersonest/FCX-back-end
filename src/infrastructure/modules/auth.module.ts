@@ -10,6 +10,7 @@ import { JwtStrategy } from '../auth/jwt.strategy';
 import { AuthService } from '../../core/usecases/auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../../core/entities/user.entity';
+import { MailModule } from './mail.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { User } from '../../core/entities/user.entity';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '60m' },
     }),
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [
