@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: fcx_postgres
+    environment:
+      POSTGRES_DB: fcxdatabase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: localfcx
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
