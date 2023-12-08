@@ -5,39 +5,49 @@ import {
   MaxLength,
   IsOptional,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserDto {
-  @IsOptional()
+  @ApiProperty({ description: 'Nome do usuário', minLength: 4, maxLength: 20 })
+  @IsNotEmpty()
   @MinLength(4)
   @MaxLength(20)
   name: string;
 
-  @IsOptional()
+  @ApiProperty({ description: 'Login do usuário', minLength: 4, maxLength: 20 })
+  @IsNotEmpty()
   @MinLength(4)
   @MaxLength(20)
   login: string;
 
-  @IsOptional()
+  @ApiProperty({ description: 'Email do usuário' })
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
+  @ApiProperty({ description: 'Senha', minLength: 8 })
   @IsOptional()
   @MinLength(8)
   password: string;
 
-  @IsOptional()
+  @ApiProperty({ description: 'Telefone do usuário' })
+  @IsNotEmpty()
   phone: string;
 
-  @IsOptional()
+  @ApiProperty({ description: 'Status do usuário' })
+  @IsNotEmpty()
   status: string;
 
-  @IsOptional()
+  @ApiProperty({ description: 'Nome da mãe do usuário' })
+  @IsNotEmpty()
   motherName: string;
 
-  @IsOptional()
+  @ApiProperty({ description: 'Data de nascimento', type: Date })
+  @IsNotEmpty()
   birth: Date;
 
-  @IsOptional()
+  @ApiProperty({ description: 'CPF do usuário', minLength: 11 })
+  @IsNotEmpty()
   @MinLength(11)
   cpf: string;
 }
