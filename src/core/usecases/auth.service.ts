@@ -20,7 +20,8 @@ export class AuthService {
 
   async login(user: User): Promise<any> {
     const payload = { login: user.login, id: user.id };
-    if (payload && payload.login && user.status === 'true') {
+
+    if (payload && payload.login && user.status.toString() == 'true') {
       return {
         user,
         access_token: this.jwtService.sign(payload, {

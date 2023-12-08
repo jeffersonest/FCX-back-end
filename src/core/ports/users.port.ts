@@ -1,5 +1,3 @@
-// src/core/ports/user.port.ts
-
 import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../../infrastructure/controllers/dto/create-user.dto';
 import { UserFilterDto } from '../../infrastructure/controllers/dto/user-filter.dto';

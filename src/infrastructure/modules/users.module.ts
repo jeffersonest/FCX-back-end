@@ -1,4 +1,3 @@
-// src/infrastructure/modules/users.module.ts
 import { Module } from '@nestjs/common';
 import { UsersAdapter } from '../adapters/users.adapter';
 import { UsersPort } from '../../core/ports/users.port';

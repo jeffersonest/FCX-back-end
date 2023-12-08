@@ -43,7 +43,6 @@ export class UsersAdapter implements UsersPort {
 
       return userData;
     } catch (error) {
-      console.log(error);
       if (error instanceof HttpException) {
         throw error;
       }
@@ -149,7 +148,6 @@ export class UsersAdapter implements UsersPort {
 
   handleDatabaseError(error: any): void {
     if (error.code === '23505') {
-      // Código de erro para violação de chave única no PostgreSQL
       if (error.detail.includes('email')) {
         throw new HttpException('O email fornecido já está em uso.', 400);
       }
@@ -217,12 +215,10 @@ export class UsersAdapter implements UsersPort {
         query.andWhere('user.cpf LIKE :cpf', { cpf: `%${filterValue}%` });
       }
 
-      // Usando LIKE para nome
       if (filterType === 'name') {
         query.andWhere('user.name LIKE :name', { name: `%${filterValue}%` });
       }
 
-      // Usando LIKE para email
       if (filterType === 'email') {
         query.andWhere('user.email LIKE :email', { email: `%${filterValue}%` });
       }
@@ -267,7 +263,6 @@ export class UsersAdapter implements UsersPort {
       endDate.setHours(23, 59, 59, 999);
       return endDate;
     } else {
-      console.log('Data inválida');
       return dateInput instanceof Date ? dateInput : new Date();
     }
   }
@@ -281,7 +276,6 @@ export class UsersAdapter implements UsersPort {
       endDate.setHours(0, 0, 0, 0);
       return endDate;
     } else {
-      console.log('Data inválida');
       return dateInput instanceof Date ? dateInput : new Date();
     }
   }

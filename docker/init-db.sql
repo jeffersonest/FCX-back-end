@@ -17,6 +17,6 @@ INSERT INTO public."user" (
     name, login, email, cpf, password, phone, birth, "motherName", status, "createdAt", "updatedAt"
 ) VALUES (
     'admin', 'admin', 'admin@gmail.com', '0000000000',
-    'hashed_password', '00000000000', '2000-03-21 21:00:00', 'admin', TRUE,
+    '$2a$10$.CpQ99uwHj2mypnf0QRMbOmh34tstO6ZY/ttZd3irzhAHWh2BTAXK', '00000000000', '2000-03-21 21:00:00', 'admin', TRUE,
     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 ) ON CONFLICT (email) DO NOTHING;

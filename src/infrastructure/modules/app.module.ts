@@ -44,7 +44,7 @@ import * as path from 'path';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE,
       entities: [User],
-      synchronize: true,
+      synchronize: false,
     }),
     UsersModule,
     AuthModule,
