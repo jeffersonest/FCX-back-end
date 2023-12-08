@@ -32,4 +32,8 @@ export class UsersService {
   async filter(userFilterDto: UserFilterDto): Promise<User[]> {
     return this.usersPort.filter(userFilterDto);
   }
+
+  async userDetails(): Promise<any> {
+    return this.usersPort.usersDetails();
+  }
 }

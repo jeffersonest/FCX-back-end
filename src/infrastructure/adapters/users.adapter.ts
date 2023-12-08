@@ -58,16 +58,6 @@ export class UsersAdapter implements UsersPort {
     });
   }
 
-  async findUserById(id: number): Promise<User | null> {
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user) {
-      throw new HttpException('Usuário não encontrado.', 404);
-    } else {
-      delete user.password;
-      return user;
-    }
-  }
-
   async checkUserExists(id: number, userData: CreateUserDto): Promise<void> {
     if (userData.email) {
       const existingUserByEmail = await this.userRepository.findOneBy({
@@ -277,6 +267,31 @@ export class UsersAdapter implements UsersPort {
       return endDate;
     } else {
       return dateInput instanceof Date ? dateInput : new Date();
+    }
+  }
+
+  async usersDetails(): Promise<any> {
+    const totalUsers = await this.userRepository.count();
+    const totalUsersActive = await this.userRepository
+      .createQueryBuilder()
+      .where('status = :status', { status: true })
+      .getCount();
+    const totalUsersInactive = await this.userRepository
+      .createQueryBuilder()
+      .where('status = :status', { status: false })
+      .getCount();
+
+    return { totalUsers, totalUsersActive, totalUsersInactive };
+  }
+
+  async findUserById(id: number): Promise<User | null> {
+    console.log('findUserById', id);
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new HttpException('Usuário não encontrado.', 404);
+    } else {
+      delete user.password;
+      return user;
     }
   }
 }

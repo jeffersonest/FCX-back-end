@@ -10,4 +10,5 @@ export abstract class UsersPort {
   abstract deleteUser(id: number): Promise<User>;
   abstract handleDatabaseError(error: any): void;
   abstract filter(userFilterDto: UserFilterDto): Promise<User[]>;
+  abstract usersDetails(): Promise<any>;
 }

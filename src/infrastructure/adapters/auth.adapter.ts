@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { RecoverAccessDto } from '../controllers/dto/recover-access.dto';
 import { MailPort } from '../../core/ports/mail.port';
+import { JwtPayload } from '../controllers/dto/payload.dto';
 
 @Injectable()
 export class AuthAdapter implements AuthPort {
@@ -24,9 +25,9 @@ export class AuthAdapter implements AuthPort {
     return null;
   }
 
-  async validateUserPayload(payload: any): Promise<User> {
-    const user = await this.userRepository.findOneBy({ id: payload.sub });
-    if (!user) {
+  async validateUserPayload(payload: JwtPayload): Promise<User> {
+    const user = await this.userRepository.findOneBy({ id: payload.id });
+    if (!user || user.status.toString() == 'false') {
       throw new UnauthorizedException();
     }
     delete user.password;

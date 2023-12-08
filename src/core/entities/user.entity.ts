@@ -9,7 +9,7 @@ import {
 import { IsNotEmpty } from 'class-validator';
 
 @Entity()
-@Unique(['login', 'email', 'cpf', 'phone'])
+@Unique(['login', 'email', 'cpf', 'phone', 'id'])
 export class User {
   @PrimaryGeneratedColumn()
   id: number;

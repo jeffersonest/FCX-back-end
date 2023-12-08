@@ -8,7 +8,6 @@ import {
   Param,
   UseGuards,
   Query,
-  Req,
 } from '@nestjs/common';
 import { User } from '../../core/entities/user.entity';
 import { UsersService } from '../../core/usecases/users.service';
@@ -28,13 +27,22 @@ export class UsersController {
   ): Promise<User[]> {
     return this.usersService.filter(userFilterDto);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('details')
+  async counters(): Promise<any> {
+    return this.usersService.userDetails();
+  }
+
+  // @UseGuards(JwtAuthGuard)
+  // REMOVIDO jwt guard para permitir cadastro de usuários
   @Post()
   async createUser(@Body() user: CreateUserDto): Promise<User> {
     return this.usersService.createUser(user);
   }
 
-  @Get()
   @UseGuards(JwtAuthGuard)
+  @Get()
   async findAllUsers(): Promise<User[]> {
     return this.usersService.findAllUsers();
   }

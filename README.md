@@ -45,11 +45,34 @@ A porta padrão da aplicação é a 3000, para acessar a documentação da API, 
 
 O endereço pardão do swagger é: http://localhost:3000/doc
 
-Para efeturar o login, utilize o usuário e a senha no swagger ou na aplicação frontend:
+Para efeturar o login, crie o seu usuário no swagger: http://localhost:3000/doc#/default/UsersController_createUser, a verificação JWT foi desabilitada nessa rota para fins de testes.
+
+aqui está um exemplo de json util para criar o seu usuário, substitua por um email válido para recuperar a senha futuramente:
 
 ```json
-{
-    "login": "admin",
-    "password": "12345678"
+    {
+  "name": "admin",
+  "login": "admin",
+  "email": "<seu email>",
+  "password": "12345678",
+  "phone": "00000000000",
+  "status": "true",
+  "motherName": "admin",
+  "birth": "2023-12-08T16:14:37.111Z",
+  "cpf": "00000000028"
 }
+```
+
+Em relação ao envio de email, foi utilizado o nodemailer, criei um acesso específicamente para esse desafio:
+
+```dotenv
+DATABASE=fcxdatabase
+DATABASE_USER=postgres
+DATABASE_PASSWORD=localfcx
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+JWT_SECRET=FCX_Backend
+MAIL_SERVICE=outlook
+MAIL_USER=<enviado no email>
+MAIL_PASSWORD=<enviado no email>
 ```
