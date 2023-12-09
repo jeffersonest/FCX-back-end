@@ -1,6 +1,6 @@
 ## Resumo (backend)
 
-Aplicação back-end foi desenvolvida utilizando o nestjs com o tipescript, foram adotados conceitos de ports e adapters,
+Aplicação back-end foi desenvolvida utilizando o nestjs com o typescript, foram adotados conceitos de ports e adapters,
 onde a camada de domínio é independente da camada de infraestrutura, o que permite que a camada de domínio seja testada
 sem a necessidade de uma base de dados, e a camada de infraestrutura possa ser alterada sem afetar a camada de domínio.
 Foi utilizado o Postgres como banco de dados, e o TypeORM como ORM, para a comunicação com o banco de dados. Para a
