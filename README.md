@@ -5,8 +5,7 @@ onde a camada de domínio é independente da camada de infraestrutura, o que per
 sem a necessidade de uma base de dados, e a camada de infraestrutura possa ser alterada sem afetar a camada de domínio.
 Foi utilizado o Postgres como banco de dados e o TypeORM como ORM para a comunicação com o banco de dados. Para a
 autenticação foi utilizado o JWT, e para a validação dos dados foi utilizado o class-validator. Para a documentação da
-API foi utilizado o Swagger. Para a comunicação com a API fetch. Para a comunicação com o docker foi utilizado o docker
-compose.
+API foi utilizado o Swagger. Para a comunicação com a API fetch.
 
 ## Iniciando a aplicação
 
