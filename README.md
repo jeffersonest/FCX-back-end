@@ -40,9 +40,9 @@ Para iniciar a aplicação, execute o comando:
 npm start
 ```
 
-A porta padrão da aplicação é a 3000, para acessar a documentação da API, acesse o link: http://localhost:3000/auth
+A porta padrão da aplicação é a 3000, acesse o link: http://localhost:3000/auth
 
-O endereço pardão do swagger é: http://localhost:3000/doc
+O endereço padrão do swagger é: http://localhost:3000/doc
 
 Para efeturar o login, crie o seu usuário no swagger: http://localhost:3000/doc#/default/UsersController_createUser, a verificação JWT foi desabilitada nessa rota para fins de testes.
 
