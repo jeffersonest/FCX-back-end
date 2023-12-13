@@ -64,6 +64,7 @@ aqui está um exemplo de json util para criar o seu usuário, substitua por um e
 
 Em relação ao envio de email, foi utilizado o nodemailer, criei um acesso específicamente para esse desafio:
 
+É necessário renomear o arquivo .env.development para .env para que as variáveis de ambiente sejam lidas pela aplicação.
 ```dotenv
 DATABASE=fcxdatabase
 DATABASE_USER=postgres
