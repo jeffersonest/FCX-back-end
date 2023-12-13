@@ -75,3 +75,5 @@ MAIL_SERVICE=outlook
 MAIL_USER=<enviado no email>
 MAIL_PASSWORD=<enviado no email>
 ```
+
+Os testes estão pré configurados e podem ser criados caso necessário.
